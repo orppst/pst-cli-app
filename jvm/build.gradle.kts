@@ -2,10 +2,7 @@
 plugins {
    java
 }
-repositories {
-   mavenCentral()
-   mavenLocal()
-}
+
 
 dependencies {
    implementation(platform("org.orph2020.pst.platforms:pst-base"))
