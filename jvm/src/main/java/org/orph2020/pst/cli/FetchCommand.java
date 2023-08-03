@@ -69,11 +69,15 @@ public class FetchCommand implements Runnable, QuarkusApplication {
             .filter(s->s.getName().equals("CliConfig"))
             .findFirst().get();
 
-      //FIXME -the below attempt to set properties will not work - not happening early enough - the OICConfig
+      //FIXME -the below attempt to set properties will not work - not happening early enough - the OidcClient is already created when this can take effect
+      // seems like the only way to make this work is to have custom filter and oidc client instance that will allo
+      // anyway it seems that a better way to do this is probably to have the user login to web
+      // interface and get a refresh token that can be saved to a file, and that read in at start
       mconfig.setPassword(password);
       System.out.println("have set password");
       mconfig.setUserName(user);
       System.out.println("parsed");
+      oidcClient.
       return new CommandLine.RunLast().execute(parseResult) ;
    }
 }
