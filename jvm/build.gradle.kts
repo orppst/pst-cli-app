@@ -1,6 +1,6 @@
 plugins {
 
-   id("io.quarkus") version "2.16.8.Final"
+   id("io.quarkus") version "3.7.3"
 }
 
 
