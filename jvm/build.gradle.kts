@@ -3,7 +3,6 @@ plugins {
    id("io.quarkus") version "3.7.3"
 }
 
-
 dependencies {
    implementation(platform("org.orph2020.pst.platforms:quarkus-base"))
    implementation(platform("org.orph2020.pst.platforms:pst-base"))
