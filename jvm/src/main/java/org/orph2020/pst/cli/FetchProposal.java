@@ -5,19 +5,16 @@ package org.orph2020.pst.cli;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.picocli.runtime.annotations.TopCommand;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.orph2020.pst.apiimpl.client.ProposalRestAPI;
-import picocli.CommandLine;
 import picocli.CommandLine.*;
 
 import jakarta.inject.Inject;
 
 @Dependent
-@Command(name = "fetch", mixinStandardHelpOptions = true)
-public class FetchCommand implements Runnable {
+@Command(name = "fetchProposal")
+public class FetchProposal implements Runnable {
 
 
     @Inject
