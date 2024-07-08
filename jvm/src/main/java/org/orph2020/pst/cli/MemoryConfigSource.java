@@ -6,7 +6,6 @@ package org.orph2020.pst.cli;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
 
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
