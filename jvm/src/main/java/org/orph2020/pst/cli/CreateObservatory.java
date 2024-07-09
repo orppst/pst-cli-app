@@ -24,6 +24,8 @@ public class CreateObservatory implements Runnable{
 
             Observatory observatory = parent.mapper.readValue(jsonFile, Observatory.class);
 
+            System.out.println(parent.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(observatory));
+
             System.out.println(parent.mapper.writeValueAsString(parent.api.createObservatory(observatory)));
 
         } catch (Exception e) {
