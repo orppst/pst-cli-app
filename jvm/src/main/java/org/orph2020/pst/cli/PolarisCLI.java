@@ -12,11 +12,14 @@ import picocli.CommandLine.*;
 
 @QuarkusMain
 @Command(
+        name = "polaris-cli",
         mixinStandardHelpOptions = true,
         subcommands = {
+                HelpCommand.class,
                 FetchPeople.class,
                 FetchProposal.class,
-                FetchObservatory.class
+                FetchObservatory.class,
+                CreateObservatory.class
         })
 public class PolarisCLI implements QuarkusApplication, Runnable {
 
