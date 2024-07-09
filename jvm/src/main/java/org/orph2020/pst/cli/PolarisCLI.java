@@ -18,7 +18,7 @@ import picocli.CommandLine.*;
                 FetchProposal.class,
                 FetchObservatory.class
         })
-public class PolarisCLI implements QuarkusApplication {
+public class PolarisCLI implements QuarkusApplication, Runnable {
 
     @Option(names = {"-u","--user"})
     String user;
@@ -39,5 +39,12 @@ public class PolarisCLI implements QuarkusApplication {
     public int run(String... args) throws Exception {
         return new CommandLine(this, factory)
                 .execute(args);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Running Polaris CLI");
+        System.out.println("User: " + user);
+        System.out.println("Password: " + password);
     }
 }
