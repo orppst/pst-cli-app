@@ -9,6 +9,7 @@ import io.quarkus.oidc.client.OidcClient;
 import io.quarkus.oidc.client.OidcClientConfig;
 import io.quarkus.oidc.client.OidcClients;
 import io.quarkus.oidc.client.runtime.TokensHelper;
+import io.quarkus.oidc.common.runtime.OidcConstants;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.Dependent;
@@ -19,6 +20,7 @@ import picocli.CommandLine.*;
 import jakarta.inject.Inject;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 @Dependent
@@ -55,22 +57,26 @@ public class FetchProposal implements Runnable {
 
     @Override
     public void run() {
-        try {
-            createOidcClient().subscribe().with(client -> {
-                oidcClient = client;
-                    tokenHelper.getTokens(oidcClient)
-                            .onItem().transformToUni(tokens -> {System.out.println("Tokens: " + tokens); return null; })
-                            .await().indefinitely();
 
-                System.out.println("After the await... ");
-            }).wait();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        Map<String, String> grantParams = new HashMap<>();
+        grantParams.put("client_id", "pst-gui");
+        grantParams.put("redirect_uri", "http://localhost:53536");
+        grantParams.put("scope", "openid");
+        grantParams.put("userinfo_uri", "http://localhost:53536");
+        grantParams.put("userinfo", "pi");
+        grantParams.put("password", "pi");
+        grantParams.put("grant_type", "password");
+
+        createOidcClient().subscribe().with(client -> {
+                    oidcClient = client;
+                    String encodedIdToken = oidcClient.getTokens(grantParams).await().indefinitely().get(OidcConstants.ID_TOKEN_VALUE);
+                    System.out.println("encodedIdToken = " + encodedIdToken);
+                });
 
         apiService = QuarkusRestClientBuilder.newBuilder()
                .baseUri(URI.create("http://localhost:8084/pst/api/"))
                .build(ProposalRestAPI.class);
+
        System.out.println("Skipping api calls");
        /*
         try {
