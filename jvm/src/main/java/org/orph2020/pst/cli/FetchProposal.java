@@ -42,7 +42,7 @@ public class FetchProposal implements Runnable {
 
     private volatile OidcClient oidcClient;
 
-    //Try to programmatically create a client
+    //Programmatically create a client
     private Uni<OidcClient> createOidcClient() {
         OidcClientConfig cfg = new OidcClientConfig();
         cfg.setId("oidc-client");
@@ -57,34 +57,36 @@ public class FetchProposal implements Runnable {
 
     @Override
     public void run() {
-
         Map<String, String> grantParams = new HashMap<>();
-        grantParams.put("client_id", "pst-gui");
-        grantParams.put("redirect_uri", "http://localhost:53536");
-        grantParams.put("scope", "openid");
-        grantParams.put("userinfo_uri", "http://localhost:53536");
-        grantParams.put("userinfo", "pi");
-        grantParams.put("password", "pi");
-        grantParams.put("grant_type", "password");
 
         createOidcClient().subscribe().with(client -> {
                     oidcClient = client;
-                    String encodedIdToken = oidcClient.getTokens(grantParams).await().indefinitely().get(OidcConstants.ID_TOKEN_VALUE);
-                    System.out.println("encodedIdToken = " + encodedIdToken);
+                    oidcClient.getTokens(grantParams).subscribe().with(
+                            tokens -> {
+                                System.out.println("tokens = " + tokens.toString());
+
+                                apiService = QuarkusRestClientBuilder.newBuilder()
+                                        .baseUri(URI.create("http://localhost:8084/pst/api/"))
+                                        .build(ProposalRestAPI.class);
+
+                                try {
+                                    System.out.println(mapper.writeValueAsString(apiService.getObservatories()));
+                                    System.out.println(mapper.writeValueAsString(apiService.getObservingProposal(1)));
+                                } catch (JsonProcessingException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+
+
+                            }
+                    );
                 });
 
-        apiService = QuarkusRestClientBuilder.newBuilder()
-               .baseUri(URI.create("http://localhost:8084/pst/api/"))
-               .build(ProposalRestAPI.class);
 
        System.out.println("Skipping api calls");
        /*
-        try {
-            System.out.println(mapper.writeValueAsString(apiService.getObservatories()));
-            System.out.println(mapper.writeValueAsString(apiService.getObservingProposal(1)));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
+
         */
     }
 }

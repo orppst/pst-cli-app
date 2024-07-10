@@ -17,8 +17,8 @@ public class MemoryConfigSource implements ConfigSource {
 
    private static final Map<String, String> configuration = new HashMap<>();
    static {
-      configuration.put("quarkus.oidc-client.grant-options.password.username","pi");
-      configuration.put("quarkus.oidc-client.grant-options.password.password","pi");
+      //configuration.put("quarkus.oidc-client.grant-options.password.username","pi");
+      //configuration.put("quarkus.oidc-client.grant-options.password.password","pi");
 
    }
 
