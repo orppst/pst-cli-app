@@ -42,7 +42,7 @@ public class FetchCommand implements Runnable, QuarkusApplication {
 
    @Inject
    protected ObjectMapper mapper;
-   @RestClient
+   //@RestClient
    ProposalRestAPI apiService;
 
    @Inject
@@ -65,14 +65,15 @@ public class FetchCommand implements Runnable, QuarkusApplication {
 
    @Override
    public void run() {
+
       try {
          createOidcClient().subscribe().with(client -> {oidcClient = client;});
-/*
+
          apiService = QuarkusRestClientBuilder.newBuilder()
                  .baseUri(URI.create("http://localhost:8084/pst/api/"))
                  .build(ProposalRestAPI.class);
 
-*/
+
          System.out.println(mapper.writeValueAsString(apiService.getObservatories()));
          System.out.println(mapper.writeValueAsString(apiService.getObservingProposal(1)));
       } catch (JsonProcessingException e) {
