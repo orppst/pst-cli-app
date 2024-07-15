@@ -8,12 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.oidc.client.OidcClient;
 import io.quarkus.oidc.client.OidcClientConfig;
 import io.quarkus.oidc.client.OidcClients;
-import io.quarkus.oidc.client.runtime.TokensHelper;
-import io.quarkus.oidc.common.runtime.OidcConstants;
 import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.unchecked.Unchecked;
 import jakarta.enterprise.context.Dependent;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.orph2020.pst.apiimpl.client.ProposalRestAPI;
 import picocli.CommandLine.*;
 
@@ -37,10 +35,8 @@ public class FetchProposal implements Runnable {
     @Inject
     OidcClients oidcClients;
 
-    OidcClient client;// = oidcClients.getClient();
-    TokensHelper tokenHelper = new TokensHelper();
-
-    private volatile OidcClient oidcClient;
+    private static OidcClient oidcClient;
+    private static boolean authenticated;//= false;
 
     //Programmatically create a client
     private Uni<OidcClient> createOidcClient() {
@@ -59,34 +55,29 @@ public class FetchProposal implements Runnable {
     public void run() {
         Map<String, String> grantParams = new HashMap<>();
 
-        createOidcClient().subscribe().with(client -> {
-                    oidcClient = client;
-                    oidcClient.getTokens(grantParams).subscribe().with(
-                            tokens -> {
-                                System.out.println("tokens = " + tokens.toString());
+        if(!authenticated) {
+            createOidcClient().subscribe().with(client -> {
+                oidcClient = client;
+                oidcClient.getTokens(grantParams).subscribe().with(
+                        Unchecked.consumer(tokens -> {
+                            System.out.println("tokens = " + tokens.toString());
+                            authenticated = true;
+                        })
+                );
+            });
+        } /*else*/ {
+            apiService = QuarkusRestClientBuilder.newBuilder()
+                    .baseUri(URI.create("http://localhost:8084/pst/api/"))
+          //          .clientHeadersFactory()
+                    .build(ProposalRestAPI.class);
 
-                                apiService = QuarkusRestClientBuilder.newBuilder()
-                                        .baseUri(URI.create("http://localhost:8084/pst/api/"))
-                                        .build(ProposalRestAPI.class);
+            try {
+                System.out.println(mapper.writeValueAsString(apiService.getObservatories()));
+                System.out.println(mapper.writeValueAsString(apiService.getObservingProposal(1)));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-                                try {
-                                    System.out.println(mapper.writeValueAsString(apiService.getObservatories()));
-                                    System.out.println(mapper.writeValueAsString(apiService.getObservingProposal(1)));
-                                } catch (JsonProcessingException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-
-
-                            }
-                    );
-                });
-
-
-       System.out.println("Skipping api calls");
-       /*
-
-
-        */
     }
 }
