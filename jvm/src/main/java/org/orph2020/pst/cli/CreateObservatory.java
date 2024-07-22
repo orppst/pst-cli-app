@@ -1,9 +1,10 @@
 package org.orph2020.pst.cli;
 
-import org.ivoa.dm.proposal.prop.Observatory;
+import org.ivoa.dm.proposal.prop.*;
 import picocli.CommandLine.*;
 
 import java.io.File;
+import java.util.List;
 
 @Command(name = "createObservatory",
         description = "create an Observatory in the Polaris tool from a JSON file")
@@ -22,11 +23,42 @@ public class CreateObservatory implements Runnable{
             System.out.println("Creating Observatory");
             System.out.println("Observatory file input: " + jsonFile.getAbsolutePath());
 
-            Observatory observatory = parent.mapper.readValue(jsonFile, Observatory.class);
+            Observatory inputObservatory = parent.mapper.readValue(jsonFile, Observatory.class);
+
+            Observatory observatory = new Observatory(null, null, null, null,
+                    inputObservatory.getName(), inputObservatory.getAddress(),
+                    inputObservatory.getIvoid(), inputObservatory.getWikiId()
+            );
 
             System.out.println(parent.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(observatory));
 
-            System.out.println(parent.mapper.writeValueAsString(parent.api.createObservatory(observatory)));
+            Observatory persistedObservatory = parent.api.createObservatory(observatory);
+            Long id = persistedObservatory.getId();
+
+            List<Telescope> telescopes = inputObservatory.getTelescopes();
+            for (Telescope telescope : telescopes) {
+                parent.api.createAndAddTelescopeToObservatory(id, telescope);
+            }
+
+            List<Instrument> instruments = inputObservatory.getInstruments();
+            for (Instrument instrument : instruments) {
+                parent.api.createAndAddInstrumentToObservatory(id, instrument);
+            }
+
+            List<Backend> backends = inputObservatory.getBackends();
+            for (Backend backend : backends) {
+                parent.api.createAndAddBackend(id, backend);
+            }
+
+            List<TelescopeArray> telescopeArrays = inputObservatory.getArrays();
+            for (TelescopeArray telescopeArray : telescopeArrays) {
+                parent.api.createAndAddArray(id, telescopeArray);
+            }
+
+            System.out.println(parent.mapper
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(parent.api.getObservatory(id))
+            );
 
         } catch (Exception e) {
             throw new RuntimeException(e);
