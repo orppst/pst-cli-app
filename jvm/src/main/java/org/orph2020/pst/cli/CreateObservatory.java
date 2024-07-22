@@ -30,8 +30,6 @@ public class CreateObservatory implements Runnable{
                     inputObservatory.getIvoid(), inputObservatory.getWikiId()
             );
 
-            System.out.println(parent.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(observatory));
-
             Observatory persistedObservatory = parent.api.createObservatory(observatory);
             Long id = persistedObservatory.getId();
 
@@ -55,10 +53,10 @@ public class CreateObservatory implements Runnable{
                 parent.api.createAndAddArray(id, telescopeArray);
             }
 
-            System.out.println(parent.mapper
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(parent.api.getObservatory(id))
-            );
+            Observatory createdObservatory = parent.api.getObservatory(id);
+
+            System.out.println("Observatory '" + createdObservatory.getName() + "' has been created " +
+                    "with id: " + createdObservatory.getId());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
