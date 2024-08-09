@@ -4,31 +4,19 @@ package org.orph2020.pst.cli;
  */
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.enterprise.context.Dependent;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.orph2020.pst.apiimpl.client.ProposalRestAPI;
 import picocli.CommandLine.*;
 
-import jakarta.inject.Inject;
-
-@Dependent
 @Command(name = "fetchProposal")
 public class FetchProposal implements Runnable {
 
-
-    @Inject
-    protected ObjectMapper mapper;
-
-    @RestClient
-    ProposalRestAPI  apiService;
-
+    @ParentCommand
+    private PolarisCLI parent;
 
     @Override
     public void run() {
        try {
-          System.out.println(mapper.writeValueAsString(apiService.getObservatories()));
-          System.out.println(mapper.writeValueAsString(apiService.getObservingProposal(1)));
+           System.out.println("Fetching proposal");
+           System.out.println(parent.mapper.writeValueAsString(parent.api.getObservingProposal(1)));
        } catch (JsonProcessingException e) {
           throw new RuntimeException(e);
        }
