@@ -1,0 +1,300 @@
+{
+  "@type": "proposal:Observatory",
+  "name": "Jodrell Bank Alt",
+  "address": "Cheshire, UK, Earth",
+  "ivoid": {
+    "value": "ivo://obs/anobs"
+  },
+  "telescopes": [
+    {
+      "name": "Lovell",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3822252.643
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": -153995.683
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5086051.443
+        }
+      }
+    },
+    {
+      "name": "Mk2",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3822473.365
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": -153692.318
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5085851.303
+        }
+      }
+    },
+    {
+      "name": "Knockin",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3859711.503
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": -201995.077
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5056134.251
+        }
+      }
+    },
+    {
+      "name": "Defford",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3923069.171
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": -146804.368
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5009320.528
+        }
+      }
+    },
+    {
+      "name": "Pickmere",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3817176.561
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": -162921.179
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5089462.057
+        }
+      }
+    },
+    {
+      "name": "Darnhall",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3828714.513
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": -169458.995
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5080647.749
+        }
+      }
+    },
+    {
+      "name": "Cambridge",
+      "location": {
+        "@type": "coords:RealCartesianPoint",
+        "x": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 3919982.752
+        },
+        "y": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 2651.982
+        },
+        "z": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "m"
+          },
+          "value": 5013849.826
+        }
+      }
+    }
+  ],
+  "instruments": [
+    {
+      "name": "L-Band Receiver",
+      "kind": "continuum",
+      "frequencyCoverage": {
+        "start": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 1.2
+        },
+        "end": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 1.7
+        },
+        "spectralResolution": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 0.5
+        },
+        "isSkyFrequency": true,
+        "polarization": "V"
+      }
+    },
+    {
+      "name": "C-Band Receiver",
+      "kind": "continuum",
+      "frequencyCoverage": {
+        "start": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 4
+        },
+        "end": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 7
+        },
+        "spectralResolution": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 3
+        },
+        "isSkyFrequency": true,
+        "polarization": "V"
+      }
+    },
+    {
+      "name": "K-Band Receiver",
+      "kind": "continuum",
+      "frequencyCoverage": {
+        "start": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 20
+        },
+        "end": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 24
+        },
+        "spectralResolution": {
+          "@type": "ivoa:RealQuantity",
+          "unit": {
+            "value": "GHz"
+          },
+          "value": 4
+        },
+        "isSkyFrequency": true,
+        "polarization": "V"
+      }
+    }
+  ],
+  "backends": [
+    {
+      "name": "Widar Correlator",
+      "parallel": true
+    }
+  ],
+  "arrays": [
+    {
+      "name": "e-MERLIN",
+      "arrayMembers": []
+    }
+  ]
+}
