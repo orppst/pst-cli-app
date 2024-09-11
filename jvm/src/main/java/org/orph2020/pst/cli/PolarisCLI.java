@@ -23,12 +23,6 @@ import picocli.CommandLine.*;
         })
 public class PolarisCLI implements QuarkusApplication, Runnable {
 
-    @Option(names = {"-u","--user"})
-    String user;
-
-    @Option(names = {"-p","--password"}, arity = "0..1", interactive = true)
-    String password;
-
     @Inject
     IFactory factory;
 
@@ -47,7 +41,11 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
     @Override
     public void run() {
         System.out.println("Running Polaris CLI");
-        System.out.println("User: " + user);
-        System.out.println("Password: " + password);
+
+        System.out.println("I need to use the OidcClient.accessTokens \n"
+                +"method to accept a Map of extra properties and pass the \n"
+                +"device_code and redirect_uri parameters to exchange the \n"
+                +"authorization code for the tokens.");
+
     }
 }
