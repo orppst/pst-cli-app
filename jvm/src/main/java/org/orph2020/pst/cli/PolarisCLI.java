@@ -3,10 +3,11 @@ package org.orph2020.pst.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.oidc.client.OidcClient;
-import io.quarkus.oidc.common.runtime.OidcConstants;
 import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.jose4j.json.internal.json_simple.parser.JSONParser;
@@ -58,6 +59,7 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
                 .execute(args);
     }
 
+
     @Override
     public void run() {
         System.out.println("Running Polaris CLI");
@@ -68,8 +70,13 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
         // Generate a device code
         HttpClient httpClient = HttpClient.newHttpClient();
         var client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:53536/realms/orppst/protocol/openid-connect/auth/device"))
-                .POST(HttpRequest.BodyPublishers.ofString("client_id=device-flow-client&client_secret=iEoMVJqKeCK9Wq05eKaZscFMdnjRLq3B"))
+        Config config = ConfigProvider.getConfig();
+
+        HttpRequest request = HttpRequest.newBuilder(
+                    URI.create(config.getConfigValue("quarkus.oidc-client.auth-server-url")
+                            + "/protocol/openid-connect/auth/device"))
+                .POST(HttpRequest.BodyPublishers.ofString("client_id=device-flow-client&client_secret="
+                    +config.getConfigValue("quarkus.oidc-client.credentials.client-secret.value")))
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
 
@@ -105,7 +112,6 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
         Map<String, String> grantParams = new HashMap<>();
         grantParams.put("device_code", device_code);
         String encodedIdToken = "";
-
 
         try {
             sleep(10000);
