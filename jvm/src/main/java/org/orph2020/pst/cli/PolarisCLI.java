@@ -72,11 +72,13 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
         var client = HttpClient.newHttpClient();
         Config config = ConfigProvider.getConfig();
 
-        HttpRequest request = HttpRequest.newBuilder(
-                    URI.create(config.getConfigValue("quarkus.oidc-client.auth-server-url")
-                            + "/protocol/openid-connect/auth/device"))
+        URI authURL = URI.create(config.getConfigValue("quarkus.oidc-client.auth-server-url").getValue()
+                + "/protocol/openid-connect/auth/device");
+
+        HttpRequest request = HttpRequest.newBuilder(authURL)
                 .POST(HttpRequest.BodyPublishers.ofString("client_id=device-flow-client&client_secret="
-                    +config.getConfigValue("quarkus.oidc-client.credentials.client-secret.value")))
+                    +config.getConfigValue("quarkus.oidc-client.credentials.client-secret.value")
+                        .getValue()))
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
 
@@ -120,6 +122,7 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
             System.out.println("Got this..." + encodedIdToken);
 
         } catch (InterruptedException e) {
+            //System.out.println("InterruptedException: " + e.getMessage());
             throw new RuntimeException(e);
         }
 
