@@ -3,6 +3,7 @@ package org.orph2020.pst.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.oidc.client.OidcClient;
+import io.quarkus.oidc.client.OidcClientException;
 import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
 import jakarta.inject.Inject;
@@ -25,6 +26,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.Thread.sleep;
 
@@ -66,6 +68,7 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
 
         String device_code = "";
         String verification_uri_complete = "";
+        Long poll_delay_seconds = 10L;
 
         // Generate a device code
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -91,6 +94,7 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
 
             device_code = (String) jsonResponse.get("device_code");
             verification_uri_complete = (String) jsonResponse.get("verification_uri_complete");
+            poll_delay_seconds = (Long) jsonResponse.get("interval");
 
         } catch (IOException | InterruptedException e) {
             System.out.println("HTTP POST error: " + e.getMessage());
@@ -115,18 +119,36 @@ public class PolarisCLI implements QuarkusApplication, Runnable {
         grantParams.put("device_code", device_code);
         String encodedIdToken = "";
 
-        try {
-            sleep(10000);
+        boolean failed = false;
+        boolean waiting = true;
 
-            encodedIdToken = oidcClient.getTokens(grantParams).await().indefinitely().get("access_token");
-            System.out.println("Got this..." + encodedIdToken);
+        while(waiting && !failed) {
+            try {
+                sleep(poll_delay_seconds * 1000L);
 
-        } catch (InterruptedException e) {
-            //System.out.println("InterruptedException: " + e.getMessage());
-            throw new RuntimeException(e);
+                encodedIdToken = oidcClient.getTokens(grantParams).await().indefinitely().get("access_token");
+                System.out.println("Got a token: " + encodedIdToken);
+
+                waiting = false;
+
+            } catch (InterruptedException | OidcClientException e) {
+                System.out.println("InterruptedException: " + e.getMessage());
+                JSONParser parser = new JSONParser();
+                JSONObject jsonResponse = null;
+                try {
+                    jsonResponse = (JSONObject) parser.parse(e.getMessage());
+                    String error = (String) jsonResponse.get("error");
+
+                    if(!Objects.equals(error, "authorization_pending")) {
+                        //Something other than pending is an error
+                        failed = true;
+                    }
+
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
-
-
 
     }
 }
