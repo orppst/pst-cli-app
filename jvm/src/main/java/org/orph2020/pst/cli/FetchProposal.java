@@ -4,8 +4,10 @@ package org.orph2020.pst.cli;
  */
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.quarkus.picocli.runtime.annotations.TopCommand;
 import picocli.CommandLine.*;
 
+@TopCommand
 @Command(name = "fetchProposal")
 public class FetchProposal implements Runnable {
 
