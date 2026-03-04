@@ -1,5 +1,6 @@
 package org.orph2020.pst.cli;
 
+import org.ivoa.dm.proposal.management.*;
 import org.ivoa.dm.proposal.prop.*;
 import picocli.CommandLine.*;
 
@@ -25,7 +26,7 @@ public class CreateObservatory implements Runnable{
 
             Observatory inputObservatory = parent.mapper.readValue(jsonFile, Observatory.class);
 
-            Observatory observatory = new Observatory(null, null, null, null,
+            Observatory observatory = new Observatory(null, null, null, null, null,
                     inputObservatory.getName(), inputObservatory.getAddress(),
                     inputObservatory.getIvoid(), inputObservatory.getWikiId()
             );
