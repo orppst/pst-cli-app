@@ -1,10 +1,10 @@
 plugins {
 
-   id("io.quarkus") version "3.32.3"
+   id("io.quarkus") version "3.33"
 }
 
 dependencies {
-   implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:3.32.3"))
+   implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:3.33"))
    implementation("org.orph2020.pst:pst-lib")
    implementation("io.quarkus:quarkus-picocli")
    implementation("io.quarkus:quarkus-rest-client-jackson")
