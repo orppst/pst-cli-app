@@ -14,7 +14,9 @@ dependencyResolutionManagement {
         maven {
             url= uri("https://central.sonatype.com/repository/maven-snapshots/")
         }
-
+        maven {
+            url= uri("https://repo.dev.uksrc.org/repository/maven-public/")
+        }
     }
 
 }
